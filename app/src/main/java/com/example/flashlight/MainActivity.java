@@ -33,7 +33,7 @@ boolean state;
 
 
         Dexter.withContext(this).withPermission(Manifest.permission.CAMERA).withListener(new PermissionListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
             @Override
             public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
                 runFlashlight();
@@ -54,43 +54,41 @@ boolean state;
         }).check();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     private void runFlashlight() {
         imageButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
             @Override
             public void onClick(View v) {
                 if(!state) {
 
                     CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+
                     try {
                         String cameraId = cameraManager.getCameraIdList()[0];
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            cameraManager.setTorchMode(cameraId, true);
-                            state = true;
-                            imageButton.setImageResource(R.drawable.torch_on);
-                        }
-                    } catch (CameraAccessException e) {
+                        cameraManager.setTorchMode(cameraId, true);
+                        state = true;
+                        imageButton.setImageResource(R.drawable.torch_on);
+
                     }
+                    catch (CameraAccessException e)
+                    { }
                 }
                     else
                     {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
                             try {
                                 String cameraId = cameraManager.getCameraIdList()[0];
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                    cameraManager.setTorchMode(cameraId, true);
-                                    state = false;
-                                    imageButton.setImageResource(R.drawable.torch_off);
-                                }
-                            } catch (@SuppressLint("NewApi") CameraAccessException e) {
-                                e.printStackTrace();
-                            }
+                                cameraManager.setTorchMode(cameraId, false);
+                                state = false;
+                                imageButton.setImageResource(R.drawable.torch_off);
+
+                            } catch (CameraAccessException e)
+                            { }
                     }
 
                 }
-            }
+
         });
     }
 }
